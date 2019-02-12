@@ -47,8 +47,11 @@ const showPage= (listOfStudents, page) =>{
       
    }
    for(let i=0; i<pageSize; i++){
+      if(listOfStudents[i+page*10-10])
       listOfStudents[i+page*10-10].style.display='';
+      
    }
+   
    
 }
 
@@ -73,23 +76,26 @@ const appendPageLinks = (numberOfPages) =>{
       paginationButton.appendChild(paginationLink);
       paginationlist.appendChild(paginationButton);
    }
-   //pagination.querySelectorAll('a')[0].className='active';
-   console.log(pagination.children.children);
-   
+
    pagination.appendChild(paginationlist);
    mainDiv.appendChild(pagination);
    
 }
 
 pagination.addEventListener('click', (e)=>{
-   //e.preventDefault();
+   
+   e.preventDefault();
    selectedPage= e.target.textContent;
-   //pagination.querySelectorAll('a')[selectedPage-1].className='active';
-   this.showPage(allStudents, selectedPage);
+   for(let i=0; i<numberOfPages;i++)
+   pagination.firstElementChild.childNodes[i].firstChild.className="";
+   
+   e.target.className='active';
+   showPage(allStudents, selectedPage);
 })
 
 showPage(allStudents, selectedPage);   
 appendPageLinks(numberOfPages);
+pagination.firstElementChild.childNodes[0].firstChild.className='active';
 
 
 
