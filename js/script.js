@@ -83,7 +83,7 @@ const appendPageLinks = (numberOfPages) =>{
 }
 
 pagination.addEventListener('click', (e)=>{
-   
+   if(e.target.tagName == 'A'){
    e.preventDefault();
    selectedPage= e.target.textContent;
    for(let i=0; i<numberOfPages;i++)
@@ -91,6 +91,7 @@ pagination.addEventListener('click', (e)=>{
    
    e.target.className='active';
    showPage(allStudents, selectedPage);
+   }
 })
 
 showPage(allStudents, selectedPage);   
