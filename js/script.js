@@ -57,6 +57,7 @@ const appendPageLinks = (numberOfPages) => {
    
    pagination.appendChild(paginationlist);
    mainDiv.appendChild(pagination);
+   if(pagination.firstElementChild.childNodes[0])
    pagination.firstElementChild.childNodes[0].firstChild.className = 'active';
 
 }
