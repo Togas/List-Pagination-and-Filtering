@@ -16,14 +16,13 @@
  will only be used inside of a function, then it can be locally 
  scoped to that function.
  ***/
-let clicked=false;
 const allStudents = document.querySelectorAll('li');
 const numberOfPages = Math.ceil(allStudents.length / 10);
 const mainDiv = document.querySelector('.page');
 const pagination = document.createElement('div');
 const pageSize=10;
 let selectedPage=1;
-
+const text= document.createElement('p');
 
 
 /*** 
@@ -76,7 +75,7 @@ const appendPageLinks = (numberOfPages) =>{
       paginationButton.appendChild(paginationLink);
       paginationlist.appendChild(paginationButton);
    }
-
+   
    pagination.appendChild(paginationlist);
    mainDiv.appendChild(pagination);
    
@@ -84,21 +83,86 @@ const appendPageLinks = (numberOfPages) =>{
 
 pagination.addEventListener('click', (e)=>{
    if(e.target.tagName == 'A'){
-   e.preventDefault();
-   selectedPage= e.target.textContent;
-   for(let i=0; i<numberOfPages;i++)
-   pagination.firstElementChild.childNodes[i].firstChild.className="";
-   
-   e.target.className='active';
-   showPage(allStudents, selectedPage);
+      e.preventDefault();
+      selectedPage= e.target.textContent;
+      for(let i=0; i<numberOfPages;i++)
+      pagination.firstElementChild.childNodes[i].firstChild.className="";
+      
+      e.target.className='active';
+      showPage(allStudents, selectedPage);
    }
 })
 
+const searchBar= document.createElement('div');
+const createSearchBar= () => {
+   const pageHeader= document.querySelector('.page-header');
+   searchBar.className='student-search';
+   const searchInput = document.createElement('input');
+   searchInput.placeholder= 'Search for students...';
+   const searchButton = document.createElement('button');
+   searchButton.innerHTML='Search'; 
+   
+   searchBar.appendChild(searchInput);
+   searchBar.appendChild(searchButton);
+   pageHeader.appendChild(searchBar);
+   
+}
+
+
 showPage(allStudents, selectedPage);   
 appendPageLinks(numberOfPages);
+createSearchBar();
 pagination.firstElementChild.childNodes[0].firstChild.className='active';
 
 
+const searchName= (fullName, nameList)=>{
+   for(let i=0; i<allStudents.length; i++)
+   allStudents[i].style='display:none';
+    
+   if(fullName ===''){
+       
+      text.textContent='You\'ve left the searchbar empty!';
+      mainDiv.getElementsByTagName('ul')[0].appendChild(text);
+      return;
+    }
+
+   
+   const nameSplitted = fullName.split(' ');
+   if(nameSplitted.length == 1){
+   for(let i=0; i<nameList.length; i++){
+      let name = nameList[i].textContent.split(' ');
+      let firstName= name[0];
+      if(firstName === nameSplitted[0]){
+         allStudents[i].style='display:';
+         return console.log('Name found');
+      } if(i == nameList.length-1) {
+         text.textContent='Unfortunately we have no students with this name';
+         mainDiv.getElementsByTagName('ul')[0].appendChild(text);
+      }
+      }
+   }else{
+      for(let i=0; i<nameList.length; i++){
+         if(fullName === nameList[i].textContent)
+         allStudents[i].style='display:';
+         if(i == nameList.length-1) 
+         console.log('no name found');
+         }
+   }
+}
+
+
+searchBar.addEventListener('click', (e) =>{
+   if(event.target.tagName == 'BUTTON'){
+      if(text.textContent){
+         text.parentNode.removeChild(text);
+      }
+
+      const name= searchBar.getElementsByTagName('input')[0].value;
+      const nameList= mainDiv.querySelectorAll('h3');
+
+      searchName(name, nameList);
+   }
+})
 
 
 // Remember to delete the comments that came with this file, and replace them with your own code comments.
