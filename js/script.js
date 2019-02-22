@@ -37,8 +37,7 @@ const showPage = (listOfStudents, page) => {
 
 
 /**
- * creates pagination for the fitting number of elements. Howerver, you have to know,
- *  the numberOfPages the function should create. 
+ * creates pagination for the fitting number of elements. The number of Pages is created dynamically depening on the number of li items
  */
 const appendPageLinks = (numberOfPages) => {
    const paginationlist = document.createElement('ul');
@@ -88,7 +87,9 @@ createSearchBar();
 /* 
 The search: takes fullName and nameList as arguments. fullName is 
 the name that you put into the search and nameList is a collection of all the 
-h3 elements that contain the names
+h3 elements that contain the names.
+Returns text if searchbar is empty. hides all students and then displays the students that got matched. Search compares regex values.
+The search is case insensitive and compares the the search input with the first letters of the students names
 */
 
 const searchName = (fullName, nameList) => {
@@ -108,7 +109,8 @@ const searchName = (fullName, nameList) => {
       for (let i = 0; i < nameList.length; i++) {
          let name = nameList[i].textContent.split(' ');
          let firstName = name[0];
-         if (firstName === nameSplitted[0]) {
+         nameSplittedRegex =new RegExp('^'+nameSplitted[0], 'i');
+         if (nameSplittedRegex.test(firstName)) {
             allStudents[i].style = 'display:';
             nameFound++;
             
