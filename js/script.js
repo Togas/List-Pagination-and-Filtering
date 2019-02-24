@@ -83,30 +83,33 @@ The search is case insensitive and compares the the search input with the first 
 */
 
 const searchName = (fullName, nameList) => {
+  //deletes back-button if already present and replaces it with a new one
+  if (document.querySelector('.page-header a i')) {
+    document.querySelector('.page-header a').parentNode.removeChild(document.querySelector('.page-header a'));
+  }
+  createBackButton(document.querySelector('.page-header'));
+
   for (let i = 0; i < allStudents.length; i++) {
     allStudents[i].style = "display:none";
   }
   if (fullName === "") {
     text.textContent = "You've left the searchbar empty!";
-    createBackButton(document.querySelector('.page-header'));
     mainDiv.getElementsByTagName("ul")[0].appendChild(text);
-    document.querySelector('.pagination').style.display='none';
+    document.querySelector('.pagination').style.display = 'none';
     return;
   }
 
   let nameFound = 0;
-  const nameRegex = new RegExp("^" + fullName, "i");
+  const nameRegex = new RegExp(fullName, "i");
   for (let i = 0; i < nameList.length; i++) {
     if (nameRegex.test(nameList[i].textContent)) {
-      createBackButton(document.querySelector('.page-header'));
       allStudents[i].style.display = "";
       nameFound++;
     }
     if (i == nameList.length - 1 && nameFound == 0) {
-      createBackButton(document.querySelector('.page-header'));
       text.textContent = "Unfortunately we have no students with this name";
       mainDiv.getElementsByTagName("ul")[0].appendChild(text);
-   
+
     }
   }
 
@@ -116,15 +119,15 @@ const searchName = (fullName, nameList) => {
 };
 
 //function creates a back button and appends it as child of the element that you provide as argument
-const createBackButton= parentElement =>{
-   const backIcon=document.createElement('i');
-   backIcon.className='fas fa-2x fa-arrow-circle-left';
-   const backIconWrapper= document.createElement('a');
-   backIconWrapper.href='index.html';
-   backIconWrapper.appendChild(document.createElement('br'));
-   backIconWrapper.appendChild(document.createElement('br'));
-   backIconWrapper.appendChild(backIcon);
-   parentElement.appendChild(backIconWrapper);
+const createBackButton = parentElement => {
+  const backIcon = document.createElement('i');
+  backIcon.className = 'fas fa-2x fa-arrow-circle-left';
+  const backIconWrapper = document.createElement('a');
+  backIconWrapper.href = 'index.html';
+  backIconWrapper.appendChild(document.createElement('br'));
+  backIconWrapper.appendChild(document.createElement('br'));
+  backIconWrapper.appendChild(backIcon);
+  parentElement.appendChild(backIconWrapper);
 
 }
 
@@ -136,10 +139,9 @@ pagination.addEventListener("click", e => {
     if (e.target.className == "active") {
       return;
     }
-
-    for (let i = 0; i < numberOfPages; i++)
-      pagination.firstElementChild.childNodes[i].firstChild.className = "";
-
+    //resets pagination class from active to nothing so that only one the 
+    //selected pagination link is marked
+    pagination.firstElementChild.childNodes.forEach((element) => element.firstChild.className = '');
     e.target.className = "active";
     showPage(allStudents, selectedPage);
   }
@@ -148,10 +150,7 @@ pagination.addEventListener("click", e => {
 //click event listener for search
 searchBar.addEventListener("click", e => {
   if (event.target.tagName == "BUTTON") {
-    if (text.textContent) {
-      text.parentNode.removeChild(text);
-    }
-
+   
     const name = searchBar.getElementsByTagName("input")[0].value;
     const nameList = mainDiv.querySelectorAll("h3");
 
